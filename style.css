@@ -1,0 +1,34 @@
+﻿body {
+	margin:0px;
+	background:#000;
+	font-family:'Yu Gothic','Meiryo UI','Meiryo',sans-serif;
+}
+
+span {
+	color:#FFF; 
+}
+
+#editor {
+	width: 100%;
+	height: 100%;
+}
+
+footer {
+	width:100%;
+	border-top:1px solid #888;
+	padding: 3px 15px;
+    position: fixed;
+    bottom: 0px;
+    z-index: 4;
+    background: #424242;
+}
+
+input {
+	background: #666;
+    border: 1px inset #00445D;
+}
+
+input:focus , input:hover {
+	border: 1px inset #00aeef;
+	background: #777;
+}
