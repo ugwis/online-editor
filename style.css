@@ -19,6 +19,7 @@ footer {
 	padding: 3px 15px;
     position: fixed;
     bottom: 0px;
+    height: 2em;
     z-index: 4;
     background: #424242;
 }
