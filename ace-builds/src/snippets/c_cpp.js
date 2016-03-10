@@ -2,54 +2,57 @@ define("ace/snippets/c_cpp",["require","exports","module"], function(require, ex
 "use strict";
 
 exports.snippetText = "## STL Collections\n\
-# std::array\n\
+# array\n\
 snippet array\n\
-	std::array<${1:T}, ${2:N}> ${3};${4}\n\
-# std::vector\n\
+	array<${1}, ${2:N}> ${3};${4}\n\
+# vector\n\
 snippet vector\n\
-	std::vector<${1:T}> ${2};${3}\n\
-# std::deque\n\
+	vector<${1}> ${2};${3}\n\
+# deque\n\
 snippet deque\n\
-	std::deque<${1:T}> ${2};${3}\n\
-# std::forward_list\n\
+	deque<${1}> ${2};${3}\n\
+# forward_list\n\
 snippet flist\n\
-	std::forward_list<${1:T}> ${2};${3}\n\
-# std::list\n\
+	forward_list<${1}> ${2};${3}\n\
+# list\n\
 snippet list\n\
-	std::list<${1:T}> ${2};${3}\n\
-# std::set\n\
+	list<${1}> ${2};${3}\n\
+# pair\n\
+snippet pair\n\
+	pair<${1}, ${2}> ${3}\n\
+# set\n\
 snippet set\n\
-	std::set<${1:T}> ${2};${3}\n\
-# std::map\n\
+	set<${1}> ${2};${3}\n\
+# map\n\
 snippet map\n\
-	std::map<${1:Key}, ${2:T}> ${3};${4}\n\
-# std::multiset\n\
+	map<${1}, ${2}> ${3};${4}\n\
+# multiset\n\
 snippet mset\n\
-	std::multiset<${1:T}> ${2};${3}\n\
-# std::multimap\n\
+	multiset<${1}> ${2};${3}\n\
+# multimap\n\
 snippet mmap\n\
-	std::multimap<${1:Key}, ${2:T}> ${3};${4}\n\
-# std::unordered_set\n\
+	multimap<${1}, ${2}> ${3};${4}\n\
+# unordered_set\n\
 snippet uset\n\
-	std::unordered_set<${1:T}> ${2};${3}\n\
-# std::unordered_map\n\
+	unordered_set<${1}> ${2};${3}\n\
+# unordered_map\n\
 snippet umap\n\
-	std::unordered_map<${1:Key}, ${2:T}> ${3};${4}\n\
-# std::unordered_multiset\n\
+	unordered_map<${1}, ${2}> ${3};${4}\n\
+# unordered_multiset\n\
 snippet umset\n\
-	std::unordered_multiset<${1:T}> ${2};${3}\n\
-# std::unordered_multimap\n\
+	unordered_multiset<${1}> ${2};${3}\n\
+# unordered_multimap\n\
 snippet ummap\n\
-	std::unordered_multimap<${1:Key}, ${2:T}> ${3};${4}\n\
-# std::stack\n\
+	unordered_multimap<${1}, ${2}> ${3};${4}\n\
+# stack\n\
 snippet stack\n\
-	std::stack<${1:T}> ${2};${3}\n\
-# std::queue\n\
+	stack<${1:T}> ${2};${3}\n\
+# queue\n\
 snippet queue\n\
-	std::queue<${1:T}> ${2};${3}\n\
-# std::priority_queue\n\
+	queue<${1:T}> ${2};${3}\n\
+# priority_queue\n\
 snippet pqueue\n\
-	std::priority_queue<${1:T}> ${2};${3}\n\
+	priority_queue<${1}> ${2};${3}\n\
 ##\n\
 ## Access Modifiers\n\
 # private\n\
@@ -92,35 +95,30 @@ snippet ns\n\
 	} /* namespace $1 */\n\
 ##\n\
 ## Input/Output\n\
-# std::cout\n\
+# cout\n\
 snippet cout\n\
-	std::cout << ${1} << std::endl;${2}\n\
-# std::cin\n\
+	cout << ${1} << endl;${2}\n\
+# cin\n\
 snippet cin\n\
-	std::cin >> ${1};${2}\n\
+	cin >> ${1};${2}\n\
 ##\n\
 ## Iteration\n\
 # for i \n\
-snippet fori\n\
-	for (int ${2:i} = 0; $2 < ${1:count}; $2${3:++}) {\n\
-		${4:/* code */}\n\
+snippet for\n\
+	for (int ${1:i} = ${2:0}; $1 < ${3}; $1++) {\n\
+		${4}\n\
 	}${5}\n\
 \n\
-# foreach\n\
-snippet fore\n\
-	for (${1:auto} ${2:i} : ${3:container}) {\n\
-		${4:/* code */}\n\
-	}${5}\n\
 # iterator\n\
 snippet iter\n\
-	for (${1:std::vector}<${2:type}>::${3:const_iterator} ${4:i} = ${5:container}.begin(); $4 != $5.end(); ++$4) {\n\
+	for (${1:vector}<${2:type}>::${3:const_iterator} ${4:i} = ${5:container}.begin(); $4 != $5.end(); ++$4) {\n\
 		${6}\n\
 	}${7}\n\
 \n\
 # auto iterator\n\
 snippet itera\n\
 	for (auto ${1:i} = $1.begin(); $1 != $1.end(); ++$1) {\n\
-		${2:std::cout << *$1 << std::endl;}\n\
+		${2:cout << *$1 << endl;}\n\
 	}${3}\n\
 ##\n\
 ## Lambdas\n\
