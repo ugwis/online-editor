@@ -16,26 +16,20 @@ var C9SearchHighlightRules = function() {
         "start" : [
             {
                 tokenNames : ["c9searchresults.constant.numeric", "c9searchresults.text", "c9searchresults.text", "c9searchresults.keyword"],
-                regex : /(^\s+[0-9]+)(:)(\d*\s?)([^\r\n]+)/,
+                regex : "(^\\s+[0-9]+)(:\\s)(.+)",
                 onMatch : function(val, state, stack) {
                     var values = this.splitRegex.exec(val);
                     var types = this.tokenNames;
                     var tokens = [{
                         type: types[0],
                         value: values[1]
-                    }, {
+                    },{
                         type: types[1],
                         value: values[2]
                     }];
                     
-                    if (values[3]) {
-                        if (values[3] == " ")
-                            tokens[1] = { type: types[1], value: values[2] + " " };
-                        else
-                            tokens.push({ type: types[1], value: values[3] });
-                    }
                     var regex = stack[1];
-                    var str = values[4];
+                    var str = values[3];
                     
                     var m;
                     var last = 0;
@@ -58,7 +52,11 @@ var C9SearchHighlightRules = function() {
                 }
             },
             {
-                regex : "^Searching for [^\\r\\n]*$",
+                token : ["string", "text"], // single line
+                regex : "(\\S.*)(:$)"
+            },
+            {
+                regex : "Searching for .*$",
                 onMatch: function(val, state, stack) {
                     var parts = val.split("\x01");
                     if (parts.length < 3)
@@ -133,26 +131,11 @@ var C9SearchHighlightRules = function() {
                 }
             },
             {
-                regex : "^(?=Found \\d+ matches)",
-                token : "text",
-                next : "numbers"
-            },
-            {
-                token : "string", // single line
-                regex : "^\\S:?[^:]+",
-                next : "numbers"
+                regex : "\\d+",
+                token: "constant.numeric"
             }
-        ],
-        numbers:[{
-            regex : "\\d+",
-            token : "constant.numeric"
-        }, {
-            regex : "$",
-            token : "text",
-            next : "start"
-        }]
+        ]
     };
-    this.normalizeRules();
 };
 
 oop.inherits(C9SearchHighlightRules, TextHighlightRules);
