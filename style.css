@@ -8,9 +8,33 @@ span {
 	color:#FFF; 
 }
 
+#toolbar {
+	position: relative;
+	width: 100%;
+	height: 40px;
+}
+
+#toolbar span {
+	font-size:10px;
+}
+
+#run {
+	background: #03A9F4;
+	border: 0px;
+	height: 40px;
+	width: 40px;
+	color: #FFF;
+}
+
+#language-select {
+	height: 40px;
+	background: #333;
+	border: 0px;
+	color: #FFF;
+}
 #editor {
 	position:absolute;
-	top:10px;
+	top:40px;
 	bottom:0px;
 	left:0px;
 	right:0px;

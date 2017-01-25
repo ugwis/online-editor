@@ -1,5 +1,20 @@
 ﻿var editor;
 
+var languages = {
+	'C++': {
+		mode: 'ace/mode/c_cpp'
+	},
+	'C': {
+		mode: 'ace/mode/c9search'
+	},
+	'Ruby': {
+		mode: 'ace/mode/ruby'
+	},
+	'Python': {
+		mode: 'ace/mode/python'
+	},
+}
+
 window.onload = function(){
 	editor = ace.edit("editor");
 	editor.setValue("#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n	\n	\n	return 0;\n}");
