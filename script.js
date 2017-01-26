@@ -1,18 +1,35 @@
 ﻿var editor;
+var running_ajax;
 
 var languages = {
+	'C++11': {
+		mode: 'ace/mode/c_cpp',
+		identifier: "cpp11"
+	},
 	'C++': {
-		mode: 'ace/mode/c_cpp'
+		mode: 'ace/mode/c_cpp',
+		identifier: "cpp"
 	},
 	'C': {
-		mode: 'ace/mode/c9search'
+		mode: 'ace/mode/c_cpp',
+		identifier: "c"
 	},
 	'Ruby': {
-		mode: 'ace/mode/ruby'
+		mode: 'ace/mode/ruby',
+		identifier: "ruby"
 	},
 	'Python': {
-		mode: 'ace/mode/python'
+		mode: 'ace/mode/python',
+		identifier: "python"
 	},
+	'PHP': {
+		mode: 'ace/mode/php',
+		identifier: "php"
+	},
+	'JavaScript': {
+		mode: 'ace/mode/javascript',
+		identifier: "js"
+	}
 }
 
 window.onload = function(){
@@ -56,4 +73,38 @@ window.onload = function(){
 		},
 		readOnly: true // false if this command should not apply in readOnly mode
 	});
+
+	for(var i in languages){
+		$("select").append($("<option>").text(i));
+	}
+
+	$("#language-select").change(function(){
+		var lang = $("#language-select option:selected").val();
+		console.log(lang);
+		editor.getSession().setMode(languages[lang].mode);
+	}).change();
+
+
+	$("#run").click(function(){
+		if($("#run").hasClass("running")){
+			running_ajax.abort();
+			$("#run").removeClass("running");
+		} else {
+			$("#run").addClass("running");
+			var lang = $("#language-select option:selected").val();
+			var code = editor.getValue();
+			running_ajax = $.ajax({
+				type: "POST",
+				url: "http://compiler.ugwis.net/api/run",
+				data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=",
+				success: function(data){
+					$("#run").removeClass("running");
+					console.log(data);
+					alert(data.stdout);
+				}
+			});
+		}
+	});
+
+
 }

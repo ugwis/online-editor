@@ -26,6 +26,10 @@ span {
 	color: #FFF;
 }
 
+.running {
+	background: #F00!important;
+}
+
 #language-select {
 	height: 40px;
 	background: #333;
