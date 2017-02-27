@@ -60,6 +60,33 @@ window.onload = function(){
 	});
 	editor.$blockScrolling = Infinity;
 	editor.navigateTo(5,1);
+	function run(){
+		$("#run").addClass("running");
+		var lang = $("#language-select option:selected").val();
+		var code = editor.getValue();
+		console.log(stdin.getValue());
+		running_ajax = $.ajax({
+			type: "POST",
+			url: "http://compiler.ugwis.net/api/run",
+			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()),
+			success: function(data){
+				$("#run").removeClass("running");
+				if(data.stderr){
+					alert(data.stderr);
+					return;
+				}
+				stdout.setValue(data.stdout);
+			}
+		});
+
+	}
+	editor.commands.addCommand({
+		name: 'Run',
+		bindKey: {win: 'Ctrl-R', mac: 'Command-R'},
+		exec: function(edtior){
+			run();
+		}
+	});
 	editor.commands.addCommand({
 		name: 'Find',
 		bindKey: {win: 'Ctrl-F',  mac: 'Command-F'},
@@ -94,25 +121,22 @@ window.onload = function(){
 		editor.getSession().setMode(languages[lang].mode);
 	}).change();
 
+	$("#auto-test").click(function(){
+		var url = window.prompt("問題文のURL","");
+		if(url){
+			var host = url.split("/")[2];
+			if(/(\d+).atcoder\.jp/.test(host)){
+				console.log(host);
+			}
+		}
+	});
 
 	$("#run").click(function(){
 		if($("#run").hasClass("running")){
 			running_ajax.abort();
 			$("#run").removeClass("running");
 		} else {
-			$("#run").addClass("running");
-			var lang = $("#language-select option:selected").val();
-			var code = editor.getValue();
-			running_ajax = $.ajax({
-				type: "POST",
-				url: "http://compiler.ugwis.net/api/run",
-				data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=",
-				success: function(data){
-					$("#run").removeClass("running");
-					console.log(data);
-					alert(data.stdout);
-				}
-			});
+			run();
 		}
 	});
 
