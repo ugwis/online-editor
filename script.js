@@ -1,4 +1,6 @@
 ﻿var editor;
+var stdin;
+var stdout;
 var running_ajax;
 
 var languages = {
@@ -29,10 +31,18 @@ var languages = {
 	'JavaScript': {
 		mode: 'ace/mode/javascript',
 		identifier: "js"
+	},
+	'Bash': {
+		mode: 'ace/mode/bash',
+		identifier: "bash"
 	}
 }
 
 window.onload = function(){
+	stdin = ace.edit("stdin");
+	stdin.setTheme("ace/theme/monokai");
+	stdout = ace.edit("stdout");
+	stdout.setTheme("ace/theme/monokai");
 	editor = ace.edit("editor");
 	editor.setValue("#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n	\n	\n	return 0;\n}");
 	editor.setTheme("ace/theme/monokai");
