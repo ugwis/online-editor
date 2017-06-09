@@ -67,7 +67,7 @@ window.onload = function(){
 		console.log(stdin.getValue());
 		running_ajax = $.ajax({
 			type: "POST",
-			url: "http://compiler.ugwis.net/api/run",
+			url: "//compiler.ugwis.net/api/run",
 			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()),
 			success: function(data){
 				$("#run").removeClass("running");
