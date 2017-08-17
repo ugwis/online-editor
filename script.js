@@ -169,7 +169,7 @@ window.onload = function(){
 			}
 		}
 		if(precompile_timer) clearTimeout(precompile_timer);
-		precompile_timer = setTimeout(pre_compile, 1000);
+		precompile_timer = setTimeout(pre_compile, 5000);
 	})
 
 	for(var i in languages){
