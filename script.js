@@ -38,6 +38,50 @@ var languages = {
 	}
 }
 
+function syntax_check(str){
+	// count pair of characters
+	var diff_brackets = 0;
+	var diff_parentheses = 0;
+	var diff_braces = 0;
+	for(var s in str){
+		var c = str[s];
+		switch(c){
+			case "(":
+				diff_parentheses++;
+				break;
+			case ")":
+				if(diff_parentheses <= 0){
+					return false;
+				}
+				diff_parentheses--;
+				break;
+			case "[":
+				diff_brackets++;
+				break;
+			case "]":
+				if(diff_brackets <= 0){
+					return false;
+				}
+				diff_brackets--;
+				break;
+			case "{":
+				diff_braces++;
+				break;
+			case "}":
+				if(diff_braces <= 0){
+					return false;
+				}
+				diff_braces--;
+				break;
+		}
+	}
+	console.log(diff_parentheses);
+	if(diff_brackets || diff_parentheses || diff_braces){
+		return false;
+	}
+	return true;
+}
+
 window.onload = function(){
 	stdin = ace.edit("stdin");
 	stdin.setTheme("ace/theme/monokai");
