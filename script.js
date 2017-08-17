@@ -164,6 +164,9 @@ window.onload = function(){
 		function pre_compile (){
 			var code = editor.getValue();
 			console.log("Syntax check:", syntax_check(code));
+			if(syntax_check(code)){
+				run(true);
+			}
 		}
 		if(precompile_timer) clearTimeout(precompile_timer);
 		precompile_timer = setTimeout(pre_compile, 1000);
