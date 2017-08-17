@@ -160,6 +160,10 @@ window.onload = function(){
 		},
 		readOnly: true // false if this command should not apply in readOnly mode
 	});
+	editor.on('change', function(){
+		var code = editor.getValue();
+		console.log("Syntax check:", syntax_check(code));
+	})
 
 	for(var i in languages){
 		$("select").append($("<option>").text(i));
