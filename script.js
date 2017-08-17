@@ -159,9 +159,14 @@ window.onload = function(){
 		},
 		readOnly: true // false if this command should not apply in readOnly mode
 	});
+	var precompile_timer;
 	editor.on('change', function(){
-		var code = editor.getValue();
-		console.log("Syntax check:", syntax_check(code));
+		function pre_compile (){
+			var code = editor.getValue();
+			console.log("Syntax check:", syntax_check(code));
+		}
+		if(precompile_timer) clearTimeout(precompile_timer);
+		precompile_timer = setTimeout(pre_compile, 1000);
 	})
 
 	for(var i in languages){
