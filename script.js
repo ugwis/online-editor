@@ -75,7 +75,6 @@ function syntax_check(str){
 				break;
 		}
 	}
-	console.log(diff_parentheses);
 	if(diff_brackets || diff_parentheses || diff_braces){
 		return false;
 	}
