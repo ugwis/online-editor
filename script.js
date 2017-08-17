@@ -104,15 +104,20 @@ window.onload = function(){
 	});
 	editor.$blockScrolling = Infinity;
 	editor.navigateTo(5,1);
-	function run(){
+	function run(is_precompile){
 		$("#run").addClass("running");
 		var lang = $("#language-select option:selected").val();
 		var code = editor.getValue();
+		if(!syntax_check(code)){
+			alert('Syntax Error');
+			$("#run").removeClass("running");
+			return
+		}
 		console.log(stdin.getValue());
 		running_ajax = $.ajax({
 			type: "POST",
 			url: "//compiler.ugwis.net/api/run",
-			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()),
+			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()) + "&precompile=" + is_precompile,
 			success: function(data){
 				$("#run").removeClass("running");
 				if(data.stderr){
@@ -128,7 +133,7 @@ window.onload = function(){
 		name: 'Run',
 		bindKey: {win: 'Ctrl-R', mac: 'Command-R'},
 		exec: function(edtior){
-			run();
+			run(false);
 		}
 	});
 	editor.commands.addCommand({
@@ -180,7 +185,7 @@ window.onload = function(){
 			running_ajax.abort();
 			$("#run").removeClass("running");
 		} else {
-			run();
+			run(false);
 		}
 	});
 
