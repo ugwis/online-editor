@@ -105,6 +105,7 @@ window.onload = function(){
 	editor.$blockScrolling = Infinity;
 	editor.navigateTo(5,1);
 	function run(is_precompile){
+		if(is_precompile === undefined) is_precompile = false;
 		$("#run").addClass("running");
 		var lang = $("#language-select option:selected").val();
 		var code = editor.getValue();
