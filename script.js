@@ -106,6 +106,7 @@ window.onload = function(){
 	editor.navigateTo(5,1);
 	function run(is_precompile){
 		if(is_precompile === undefined) is_precompile = false;
+		if(running_ajax !== undefined) running_ajax.abort();
 		if(!is_precompile) $("#run").addClass("running");
 		var lang = $("#language-select option:selected").val();
 		var code = editor.getValue();
@@ -115,7 +116,7 @@ window.onload = function(){
 			return
 		}
 		console.log(stdin.getValue());
-		is_precompile?precompile_ajax:running_ajax = $.ajax({
+		running_ajax = $.ajax({
 			type: "POST",
 			url: "//compiler.ugwis.net/api/run",
 			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()) + "&precompile=" + is_precompile,
@@ -125,7 +126,8 @@ window.onload = function(){
 					alert(data.stderr);
 					return;
 				}
-				stdout.setValue(data.stdout);
+				if(!is_precompile) stdout.setValue(data.stdout);
+				running_ajax = undefined;
 			}
 		});
 
