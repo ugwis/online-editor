@@ -79,3 +79,14 @@ input:focus , input:hover {
 	border: 1px inset #00aeef;
 	background: #777;
 }
+
+#build-tag {
+	background: #235770;
+    padding: 3px 7px;
+    border-radius: 3px;
+    color: #cdcdcd;
+}
+
+.hidden {
+	display: none;
+}
