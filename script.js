@@ -2,6 +2,7 @@
 var stdin;
 var stdout;
 var running_ajax;
+var precompile_ajax;
 
 var languages = {
 	'C++11': {
@@ -105,21 +106,21 @@ window.onload = function(){
 	editor.navigateTo(5,1);
 	function run(is_precompile){
 		if(is_precompile === undefined) is_precompile = false;
-		$("#run").addClass("running");
+		if(!is_precompile) $("#run").addClass("running");
 		var lang = $("#language-select option:selected").val();
 		var code = editor.getValue();
 		if(!syntax_check(code)){
 			alert('Syntax Error');
-			$("#run").removeClass("running");
+			if(!is_precompile) $("#run").removeClass("running");
 			return
 		}
 		console.log(stdin.getValue());
-		running_ajax = $.ajax({
+		is_precompile?precompile_ajax:running_ajax = $.ajax({
 			type: "POST",
 			url: "//compiler.ugwis.net/api/run",
 			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()) + "&precompile=" + is_precompile,
 			success: function(data){
-				$("#run").removeClass("running");
+				if(!is_precompile) $("#run").removeClass("running");
 				if(data.stderr){
 					alert(data.stderr);
 					return;
