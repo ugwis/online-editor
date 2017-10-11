@@ -7,7 +7,7 @@ deploy:
   secret_access_key:
     secure: "imymjVIKDtCudP+mj3oQ3NP5iiwB8SmzIA2SKLEmfP7JO8rELd3HUfb0jzYZEO/Lg50Ffah19/plDY981QPvLW5JyFPSSUY7VkUU8xxhX9tW9dEIFCLib/NuLrBxjJ70XmvBksftKiDfieVLXIYE3gkbVTWP3dc8Z+6uMbOZd9hDBWlRjNWvO1/keL7rV4uCgMKP0rpZ268iU2dtxmFAtJy+tnhKG0BDb1Tke+vezOAwtt6RsYYOmtmOzbzxseb1SFT7Ai7xB4arQ8MQdnnXkhSo3WB1gGjVhMBXNfnJQ/sBwWLVE8Xk1K6SgUnFXilIxSMAi2Fyh816wdZcFmNX1m0eCKEgkrcjmUKKbHrRssn0q+vNZ/xa7Dmhfz9N5Jgy1HqGOznMHYMc3QcadLmcpZZoQDQUAexobGkGW66PvhCFfrMFQNOYvbMC19H5pN1PpRx0lI8mSIk1VQ4J/vYYMbUzxWZegfMSddjFQA2GwlfH4WaJujx8zh+MI6L7q8aFCsAQ2Ir2X1SVFZIxbIa3cTHBCrSmYMhsA6uael5pHklspWwj7lP+WChIHaiM+5TY2VeHGUs19saZbqQ3GIZikmGC8ohG1JeoKkffzgnaq7hchUfZV8RWP706zhBeSQDFW1xRSqqIoPH0KqP9eWOK2SQJKK0pnkb7zv3rOND15lg="
   bucket: editor-ugwis-net
-  region: us-east-1
+  region: ap-northeast-1
   endpoint: s3.amazonaws.com
   on:
     branch: master
