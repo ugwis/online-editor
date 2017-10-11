@@ -122,6 +122,7 @@ window.onload = function(){
 			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()) + "&precompile=" + is_precompile,
 			success: function(data){
 				if(!is_precompile) $("#run").removeClass("running");
+				$("#modify-tag").addClass("hidden");
 				if(data.stderr){
 					alert(data.stderr);
 					return;
