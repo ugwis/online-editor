@@ -128,7 +128,8 @@ window.onload = function(){
 				}
 				if(!is_precompile) stdout.setValue(data.stdout);
 				running_ajax = undefined;
-				$("#build-tag").removeClass("hidden")
+				$("#build-tag").removeClass("hidden");
+				$("$modify-tag").addClass("hidden");
 			}
 		});
 
@@ -166,6 +167,7 @@ window.onload = function(){
 	var precompile_timer;
 	editor.on('change', function(){
 		$("#build-tag").addClass("hidden");
+		$("#modify-tag").removeClass("hidden");
 		function pre_compile (){
 			var code = editor.getValue();
 			console.log("Syntax check:", syntax_check(code));
@@ -206,5 +208,6 @@ window.onload = function(){
 		}
 	});
 
+	$("#modify-tag").addClass("hidden");
 	$("#build-tag").addClass("hidden");
 }
