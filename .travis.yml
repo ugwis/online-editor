@@ -1,5 +1,9 @@
-language: node_js
-script: echo "do nothing"
+language: python
+python:
+  - "3.5"
+cache: pip
+install:
+  - pip install awscli
 deploy:
   skip_cleanup: true
   provider: s3
@@ -12,3 +16,6 @@ deploy:
   endpoint: s3.amazonaws.com
   on:
     branch: master
+after_deploy:
+  - aws configure set preview.cloudfront true
+  - aws cloudfront create-invalidation --distribution-id "ELHV96H5YN66D" --paths "/*"
