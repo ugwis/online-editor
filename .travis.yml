@@ -4,6 +4,8 @@ python:
 cache: pip
 install:
   - pip install awscli
+script:
+  - echo "Do nothing"
 deploy:
   skip_cleanup: true
   provider: s3
