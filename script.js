@@ -130,7 +130,7 @@ window.onload = function(){
 				if(!is_precompile) stdout.setValue(data.stdout);
 				running_ajax = undefined;
 				$("#build-tag").removeClass("hidden");
-				$("$modify-tag").addClass("hidden");
+				$("#modify-tag").addClass("hidden");
 			}
 		});
 
