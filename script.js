@@ -37,7 +37,7 @@ var languages = {
 		mode: 'ace/mode/bash',
 		identifier: "bash"
 	}
-}
+};
 
 function syntax_check(str){
 	// count pair of characters
@@ -113,7 +113,7 @@ window.onload = function(){
 		if(!syntax_check(code)){
 			alert('Syntax Error');
 			if(!is_precompile) $("#run").removeClass("running");
-			return
+			return;
 		}
 		console.log(stdin.getValue());
 		running_ajax = $.ajax({
@@ -142,29 +142,6 @@ window.onload = function(){
 			run(false);
 		}
 	});
-	editor.commands.addCommand({
-		name: 'Find',
-		bindKey: {win: 'Ctrl-F',  mac: 'Command-F'},
-		exec: function(editor) {
-			$("footer").slideDown(function(){
-				//var isVisibleSearchBar = $("footer").css("display") == "block";
-				$("footer").css("display") == "block";
-				$("#searchtext").focus();
-				$("#searchtext").keydown(function(e){
-					if(e.keyCode == 27){
-						$("footer").slideUp(function(){
-							$("footer").css("display") == "none";
-							editor.focus();
-						});
-					}
-				});
-			});
-
-/*			var search_text = $("#searchtext").val();
-			editor.find(search_text);*/
-		},
-		readOnly: true // false if this command should not apply in readOnly mode
-	});
 	var precompile_timer;
 	editor.on('change', function(){
 		$("#build-tag").addClass("hidden");
@@ -178,7 +155,7 @@ window.onload = function(){
 		}
 		if(precompile_timer) clearTimeout(precompile_timer);
 		precompile_timer = setTimeout(pre_compile, 5000);
-	})
+	});
 
 	for(var i in languages){
 		$("select").append($("<option>").text(i));
@@ -211,4 +188,4 @@ window.onload = function(){
 
 	$("#modify-tag").addClass("hidden");
 	$("#build-tag").addClass("hidden");
-}
+};
