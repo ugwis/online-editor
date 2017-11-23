@@ -4,6 +4,8 @@ var stdout;
 var running_ajax;
 var precompile_ajax;
 
+var url = "http://localhost:3000"
+
 var languages = {
 	'C++11': {
 		mode: 'ace/mode/c_cpp',
@@ -38,6 +40,17 @@ var languages = {
 		identifier: "bash"
 	}
 };
+
+function remove_control_character(str){
+	var ret = "";
+	for (var i=0; i<str.length; i++) {
+		var chr = str.charCodeAt(i);
+		if (chr >= 0x20 || chr == 0x0d || chr == 0x0a) {
+			ret += String.fromCharCode(chr);
+		}
+	}
+	return ret;
+}
 
 function syntax_check(str){
 	// count pair of characters
@@ -118,19 +131,30 @@ window.onload = function(){
 		console.log(stdin.getValue());
 		running_ajax = $.ajax({
 			type: "POST",
-			url: "//compiler.ugwis.net/api/run",
-			data: "language=" + languages[lang].identifier + "&source_code=" + encodeURIComponent(code) + "&input=" + encodeURIComponent(stdin.getValue()) + "&precompile=" + is_precompile,
+			url: url + "/build",
+			data: JSON.stringify({language: languages[lang].identifier, code: code}),
 			success: function(data){
-				if(!is_precompile) $("#run").removeClass("running");
-				$("#modify-tag").addClass("hidden");
-				if(data.stderr){
-					alert(data.stderr);
-					return;
-				}
-				if(!is_precompile) stdout.setValue(data.stdout);
-				running_ajax = undefined;
-				$("#build-tag").removeClass("hidden");
-				$("#modify-tag").addClass("hidden");
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", url + "/run", true);
+				xhr.onprogress = function () {
+					console.log("PROGRESS:", xhr.responseText);
+					stdout.setValue(remove_control_character(xhr.responseText));
+				};
+				xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+				xhr.onload = function(e) {
+					console.log(xhr.readyState);
+					if (xhr.readyState === 4) {
+						if (xhr.status === 200) {
+							if(!is_precompile) $("#run").removeClass("running");
+							$("#modify-tag").addClass("hidden");
+							stdout.setValue(remove_control_character(xhr.responseText));
+							running_ajax = undefined;
+							$("#build-tag").removeClass("hidden");
+							$("#modify-tag").addClass("hidden");
+						}
+					}
+				};
+				xhr.send(JSON.stringify({language: languages[lang].identifier, code: code, stdin: stdin.getValue()}));
 			}
 		});
 
