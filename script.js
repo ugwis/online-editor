@@ -4,7 +4,7 @@ var stdout;
 var running_ajax;
 var precompile_ajax;
 
-var url = "http://localhost:3000"
+var url = "http://compiler.ugwis.net";
 
 var languages = {
 	'C++11': {
