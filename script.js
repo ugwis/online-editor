@@ -97,7 +97,7 @@ function syntax_check(str){
 }
 
 window.onload = function(){
-	if(location.href === "http://localhost:8080/online-editor/"){
+	if(location.hostname !== "editor.ugwis.net"){
 		url = debugUrl;
 	}
 	stdin = ace.edit("stdin");
