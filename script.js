@@ -32,10 +32,10 @@ var languages = {
 		mode: 'ace/mode/php',
 		identifier: "php"
 	},
-	'JavaScript': {
+	/*'JavaScript': {
 		mode: 'ace/mode/javascript',
 		identifier: "js"
-	},
+	},*/
 	'Bash': {
 		mode: 'ace/mode/bash',
 		identifier: "bash"
