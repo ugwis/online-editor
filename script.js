@@ -19,10 +19,10 @@ var languages = {
 		mode: 'ace/mode/c_cpp',
 		identifier: "c"
 	},
-	'Ruby': {
+	/*'Ruby': {
 		mode: 'ace/mode/ruby',
 		identifier: "ruby"
-	},
+	},*/
 	'Python': {
 		mode: 'ace/mode/python',
 		identifier: "python"
@@ -31,10 +31,10 @@ var languages = {
 		mode: 'ace/mode/php',
 		identifier: "php"
 	},
-	'JavaScript': {
+	/*'JavaScript': {
 		mode: 'ace/mode/javascript',
 		identifier: "js"
-	},
+	},*/
 	'Bash': {
 		mode: 'ace/mode/bash',
 		identifier: "bash"
