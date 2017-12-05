@@ -5,6 +5,7 @@ var running_ajax;
 var precompile_ajax;
 
 var url = "//compiler.ugwis.net";
+var debugUrl = "http://localhost:3000";
 
 var languages = {
 	'C++11': {
@@ -31,10 +32,10 @@ var languages = {
 		mode: 'ace/mode/php',
 		identifier: "php"
 	},
-	/*'JavaScript': {
+	'JavaScript': {
 		mode: 'ace/mode/javascript',
 		identifier: "js"
-	},*/
+	},
 	'Bash': {
 		mode: 'ace/mode/bash',
 		identifier: "bash"
@@ -96,6 +97,9 @@ function syntax_check(str){
 }
 
 window.onload = function(){
+	if(location.href === "http://localhost:8080/online-editor/"){
+		url = debugUrl;
+	}
 	stdin = ace.edit("stdin");
 	stdin.setTheme("ace/theme/monokai");
 	stdout = ace.edit("stdout");
