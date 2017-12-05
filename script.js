@@ -155,6 +155,12 @@ window.onload = function(){
 							running_ajax = undefined;
 							$("#build-tag").removeClass("hidden");
 							$("#modify-tag").addClass("hidden");
+						} else {
+							if(!is_precompile) $("#run").removeClass("running");
+							$("#modify-tag").addClass("hidden");
+							$("#warning-tag").removeClass("hidden").innerText(xhr.responseText);
+							running_ajax = undefined;
+							$("#modify-tag").addClass("hidden");
 						}
 					}
 				};
@@ -216,4 +222,5 @@ window.onload = function(){
 
 	$("#modify-tag").addClass("hidden");
 	$("#build-tag").addClass("hidden");
+	$("#warning-tag").addClass("hidden");
 };

@@ -94,6 +94,13 @@ input:focus , input:hover {
     color: #cdcdcd;
 }
 
+#warning-tag {
+	background: #970000;
+    padding: 3px 7px;
+    border-radius: 3px;
+    color: #cdcdcd;
+}
+
 .hidden {
 	display: none;
 }
