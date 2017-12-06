@@ -2,6 +2,7 @@
 var stdin;
 var stdout;
 var xhr;
+var prog;
 
 var url = "//compiler.ugwis.net";
 var debugUrl = "http://localhost:3000";
@@ -95,25 +96,38 @@ function syntax_check(str){
 	return true;
 }
 
+function progress(){
+	if(xhr === undefined){
+		prog = undefined;
+		return;
+	}
+	if($("#progressbar").width()/$("#toolbar").width() >= 0.9){
+		prog = undefined;
+		return;
+	}
+	$("#progressbar").width($("#progressbar").width()+50);
+	prog = setTimeout(progress, 1000);
+}
+
 function build(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
 	$("#run").addClass("running");
+	$("#progressbar").width("10%");
 	xhr = new XMLHttpRequest();
+	if(prog === undefined) prog = setTimeout(progress(),0);
 	xhr.open("POST", url + "/build", true);
-	xhr.onprogress = function () {
-		console.log("PROGRESS:", xhr.responseText);
-		stdout.setValue(remove_control_character(xhr.responseText));
-	};
 	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
 	xhr.onload = function(e) {
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
-			if (xhr.status === 200) {
+			if (xhr.status >= 200 && xhr.status < 300) {
 				$("#run").removeClass("running");
 				$("#modify-tag").addClass("hidden");
 				stdout.setValue(remove_control_character(xhr.responseText));
 				$("#build-tag").removeClass("hidden");
+				$("#progressbar").width("50%");
+				setTimeout(function(){$("#progressbar").width("0%");},5000);
 				xhr = undefined;
 				callback(lang, code);
 			} else {
@@ -133,6 +147,7 @@ function run(lang, code, callback){
 	if(callback === undefined) callback = function(){};
 	$("#run").addClass("running");
 	xhr = new XMLHttpRequest();
+	if(prog === undefined) prog = setTimeout(progress(),0);
 	xhr.open("POST", url + "/run", true);
 	xhr.onprogress = function () {
 		console.log("PROGRESS:", xhr.responseText);
@@ -142,10 +157,12 @@ function run(lang, code, callback){
 	xhr.onload = function(e) {
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
-			if (xhr.status === 200) {
+			if (xhr.status >= 200 && xhr.status < 300) {
 				$("#run").removeClass("running");
 				stdout.setValue(remove_control_character(xhr.responseText));
 				xhr = undefined;
+				$("#progressbar").width("100%");
+				setTimeout(function(){$("#progressbar").width("0%");},5000);
 				callback();
 			} else {
 				$("#run").removeClass("running");
