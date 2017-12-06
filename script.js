@@ -1,8 +1,7 @@
 ﻿var editor;
 var stdin;
 var stdout;
-var running_ajax;
-var precompile_ajax;
+var xhr;
 
 var url = "//compiler.ugwis.net";
 var debugUrl = "http://localhost:3000";
@@ -96,6 +95,69 @@ function syntax_check(str){
 	return true;
 }
 
+function build(lang, code, callback){
+	if(xhr) return;
+	if(callback === undefined) callback = function(){};
+	$("#run").addClass("running");
+	xhr = new XMLHttpRequest();
+	xhr.open("POST", url + "/build", true);
+	xhr.onprogress = function () {
+		console.log("PROGRESS:", xhr.responseText);
+		stdout.setValue(remove_control_character(xhr.responseText));
+	};
+	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+	xhr.onload = function(e) {
+		console.log(xhr.readyState);
+		if (xhr.readyState === 4) {
+			if (xhr.status === 200) {
+				$("#run").removeClass("running");
+				$("#modify-tag").addClass("hidden");
+				stdout.setValue(remove_control_character(xhr.responseText));
+				$("#build-tag").removeClass("hidden");
+				xhr = undefined;
+				callback(lang, code);
+			} else {
+				$("#run").removeClass("running");
+				$("#modify-tag").addClass("hidden");
+				$("#warning-tag").removeClass("hidden").text(xhr.responseText);
+				$("#modify-tag").addClass("hidden");
+				xhr = undefined;
+			}
+		}
+	};
+	xhr.send(JSON.stringify({language: lang, code: code}));
+}
+
+function run(lang, code, callback){
+	if(xhr) return;
+	if(callback === undefined) callback = function(){};
+	$("#run").addClass("running");
+	xhr = new XMLHttpRequest();
+	xhr.open("POST", url + "/run", true);
+	xhr.onprogress = function () {
+		console.log("PROGRESS:", xhr.responseText);
+		stdout.setValue(remove_control_character(xhr.responseText));
+	};
+	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+	xhr.onload = function(e) {
+		console.log(xhr.readyState);
+		if (xhr.readyState === 4) {
+			if (xhr.status === 200) {
+				$("#run").removeClass("running");
+				stdout.setValue(remove_control_character(xhr.responseText));
+				xhr = undefined;
+				callback();
+			} else {
+				$("#run").removeClass("running");
+				$("#warning-tag").removeClass("hidden").innerText(xhr.responseText);
+				xhr = undefined;
+			}
+		}
+	};
+	xhr.send(JSON.stringify({language: lang, code: code, input: stdin.getValue()}));
+}
+
+
 window.onload = function(){
 	if(location.hostname !== "editor.ugwis.net"){
 		url = debugUrl;
@@ -121,59 +183,19 @@ window.onload = function(){
 	});
 	editor.$blockScrolling = Infinity;
 	editor.navigateTo(5,1);
-	function run(is_precompile){
-		if(is_precompile === undefined) is_precompile = false;
-		if(running_ajax !== undefined) running_ajax.abort();
-		if(!is_precompile) $("#run").addClass("running");
+	var func_run = function(callback){
 		var lang = $("#language-select option:selected").val();
-		var code = editor.getValue();
-		if(!syntax_check(code)){
-			alert('Syntax Error');
-			if(!is_precompile) $("#run").removeClass("running");
-			return;
-		}
-		console.log(stdin.getValue());
-		running_ajax = $.ajax({
-			type: "POST",
-			url: url + "/build",
-			data: JSON.stringify({language: languages[lang].identifier, code: code}),
-			success: function(data){
-				var xhr = new XMLHttpRequest();
-				xhr.open("POST", url + "/run", true);
-				xhr.onprogress = function () {
-					console.log("PROGRESS:", xhr.responseText);
-					stdout.setValue(remove_control_character(xhr.responseText));
-				};
-				xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-				xhr.onload = function(e) {
-					console.log(xhr.readyState);
-					if (xhr.readyState === 4) {
-						if (xhr.status === 200) {
-							if(!is_precompile) $("#run").removeClass("running");
-							$("#modify-tag").addClass("hidden");
-							stdout.setValue(remove_control_character(xhr.responseText));
-							running_ajax = undefined;
-							$("#build-tag").removeClass("hidden");
-							$("#modify-tag").addClass("hidden");
-						} else {
-							if(!is_precompile) $("#run").removeClass("running");
-							$("#modify-tag").addClass("hidden");
-							$("#warning-tag").removeClass("hidden").innerText(xhr.responseText);
-							running_ajax = undefined;
-							$("#modify-tag").addClass("hidden");
-						}
-					}
-				};
-				xhr.send(JSON.stringify({language: languages[lang].identifier, code: code, stdin: stdin.getValue()}));
-			}
-		});
-
-	}
+		build(
+			languages[lang].identifier,	
+			editor.getValue(),
+			callback
+		);
+	};
 	editor.commands.addCommand({
 		name: 'Run',
 		bindKey: {win: 'Ctrl-R', mac: 'Command-R'},
 		exec: function(edtior){
-			run(false);
+			func_run(run);
 		}
 	});
 	var precompile_timer;
@@ -184,7 +206,7 @@ window.onload = function(){
 			var code = editor.getValue();
 			console.log("Syntax check:", syntax_check(code));
 			/*if(syntax_check(code)){
-				run(true);
+				func_run();
 			}*/
 		}
 		if(precompile_timer) clearTimeout(precompile_timer);
@@ -213,10 +235,9 @@ window.onload = function(){
 
 	$("#run").click(function(){
 		if($("#run").hasClass("running")){
-			running_ajax.abort();
 			$("#run").removeClass("running");
 		} else {
-			run(false);
+			func_run(run);
 		}
 	});
 
