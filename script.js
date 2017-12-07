@@ -101,19 +101,20 @@ function progress(){
 		prog = undefined;
 		return;
 	}
-	if($("#progressbar").width()/$("#toolbar").width() >= 0.9){
+	if(parseInt(document.getElementById("progressbar").style.width) >= 90){
 		prog = undefined;
 		return;
 	}
-	$("#progressbar").width($("#progressbar").width()+50);
+	document.getElementById("progressbar").style.width = String(parseInt(document.getElementById("progressbar").style.width) + 10) + "%";
 	prog = setTimeout(progress, 1000);
 }
 
 function build(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
-	$("#run").addClass("running");
-	$("#progressbar").width("10%");
+	document.getElementById("run").classList.add('running');
+	document.getElementById("progressbar").style.width = "0%";
+	document.getElementById("progressbar").style.opacity = "1.0";
 	xhr = new XMLHttpRequest();
 	if(prog === undefined) prog = setTimeout(progress(),0);
 	xhr.open("POST", url + "/build", true);
@@ -122,19 +123,19 @@ function build(lang, code, callback){
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
 			if (xhr.status >= 200 && xhr.status < 300) {
-				$("#run").removeClass("running");
-				$("#modify-tag").addClass("hidden");
+				document.getElementById("run").classList.remove('running');
+				document.getElementById("modify-tag").classList.add('hidden');
 				stdout.setValue(remove_control_character(xhr.responseText));
-				$("#build-tag").removeClass("hidden");
-				$("#progressbar").width("50%");
-				setTimeout(function(){$("#progressbar").width("0%");},5000);
+				document.getElementById("build-tag").classList.remove('hidden');
+				document.getElementById("progressbar").style.width = "50%";
+				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 				callback(lang, code);
 			} else {
-				$("#run").removeClass("running");
-				$("#modify-tag").addClass("hidden");
-				$("#warning-tag").removeClass("hidden").text(xhr.responseText);
-				$("#modify-tag").addClass("hidden");
+				document.getElementById("run").classList.remove('running');
+				document.getElementById("modify-tag").classList.add('hidden');
+				document.getElementById("warning-tag").classList.remove('hidden');
+				document.getElementById("warning-tag").innerText = xhr.responseText;
 				xhr = undefined;
 			}
 		}
@@ -145,7 +146,8 @@ function build(lang, code, callback){
 function run(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
-	$("#run").addClass("running");
+	document.getElementById("run").classList.add("running");
+	document.getElementById("progressbar").style.opacity = "1.0";
 	xhr = new XMLHttpRequest();
 	if(prog === undefined) prog = setTimeout(progress(),0);
 	xhr.open("POST", url + "/run", true);
@@ -158,15 +160,16 @@ function run(lang, code, callback){
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
 			if (xhr.status >= 200 && xhr.status < 300) {
-				$("#run").removeClass("running");
+				document.getElementById("run").classList.remove('running');
 				stdout.setValue(remove_control_character(xhr.responseText));
+				document.getElementById("progressbar").style.width = "100%";
+				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
-				$("#progressbar").width("100%");
-				setTimeout(function(){$("#progressbar").width("0%");},5000);
-				callback();
+				callback(lang, code, callback);
 			} else {
-				$("#run").removeClass("running");
-				$("#warning-tag").removeClass("hidden").innerText(xhr.responseText);
+				document.getElementById("run").classList.remove('running');
+				document.getElementById("warning-tag").classList.remove('hidden');
+				document.getElementById("warning-tag").innerText = xhr.responseText;
 				xhr = undefined;
 			}
 		}
@@ -201,7 +204,7 @@ window.onload = function(){
 	editor.$blockScrolling = Infinity;
 	editor.navigateTo(5,1);
 	var func_run = function(callback){
-		var lang = $("#language-select option:selected").val();
+		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
 		build(
 			languages[lang].identifier,	
 			editor.getValue(),
@@ -217,8 +220,8 @@ window.onload = function(){
 	});
 	var precompile_timer;
 	editor.on('change', function(){
-		$("#build-tag").addClass("hidden");
-		$("#modify-tag").removeClass("hidden");
+		document.getElementById("build-tag").classList.add('hidden');
+		document.getElementById("modify-tag").classList.remove('hidden');
 		function pre_compile (){
 			var code = editor.getValue();
 			console.log("Syntax check:", syntax_check(code));
@@ -231,16 +234,19 @@ window.onload = function(){
 	});
 
 	for(var i in languages){
-		$("select").append($("<option>").text(i));
+		var option = document.createElement("option");
+		option.text = i;
+		option.value = i;
+		document.getElementsByTagName("select")[0].appendChild(option);
 	}
 
-	$("#language-select").change(function(){
-		var lang = $("#language-select option:selected").val();
+	document.getElementById("language-select").onchange = function(event){
+		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
 		console.log(lang);
 		editor.getSession().setMode(languages[lang].mode);
-	}).change();
+	};
 
-	$("#auto-test").click(function(){
+	/*document.getElementById("auto-test").onclick = function(event){
 		var url = window.prompt("問題文のURL","");
 		if(url){
 			var host = url.split("/")[2];
@@ -248,17 +254,17 @@ window.onload = function(){
 				console.log(host);
 			}
 		}
-	});
+	};*/
 
-	$("#run").click(function(){
-		if($("#run").hasClass("running")){
-			$("#run").removeClass("running");
+	document.getElementById("run").onclick = function(event){
+		if(document.getElementById("run").classList.contains("running")) {
+			document.getElementById("run").classList.remove("running");
 		} else {
 			func_run(run);
 		}
-	});
+	};
 
-	$("#modify-tag").addClass("hidden");
-	$("#build-tag").addClass("hidden");
-	$("#warning-tag").addClass("hidden");
+	document.getElementById("modify-tag").classList.add("hidden");
+	document.getElementById("build-tag").classList.add("hidden");
+	document.getElementById("warning-tag").classList.add("hidden");
 };
