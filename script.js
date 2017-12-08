@@ -119,7 +119,7 @@ function build(lang, code, callback){
 	if(prog === undefined) prog = setTimeout(progress(),0);
 	xhr.open("POST", url + "/build", true);
 	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-	xhr.onload = function(e) {
+	xhr.onreadystatechange = function(e) {
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
 			if (xhr.status >= 200 && xhr.status < 300) {
@@ -131,6 +131,13 @@ function build(lang, code, callback){
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 				callback(lang, code);
+			} else if(xhr.status == 0) {
+				document.getElementById("run").classList.remove('running');
+				document.getElementById("modify-tag").classList.add('hidden');
+				document.getElementById("warning-tag").classList.remove('hidden');
+				document.getElementById("warning-tag").innerText = "Server response not received.";
+				document.getElementById("progressbar").style.opacity = "0.0";
+				xhr = undefined;
 			} else {
 				document.getElementById("run").classList.remove('running');
 				document.getElementById("modify-tag").classList.add('hidden');
@@ -156,7 +163,7 @@ function run(lang, code, callback){
 		stdout.setValue(remove_control_character(xhr.responseText));
 	};
 	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-	xhr.onload = function(e) {
+	xhr.onreadystatechange = function(e) {
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
 			if (xhr.status >= 200 && xhr.status < 300) {
@@ -166,6 +173,13 @@ function run(lang, code, callback){
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 				callback(lang, code, callback);
+			} else if(xhr.status == 0) {
+				document.getElementById("run").classList.remove('running');
+				document.getElementById("modify-tag").classList.add('hidden');
+				document.getElementById("warning-tag").classList.remove('hidden');
+				document.getElementById("warning-tag").innerText = "Server response not received.";
+				document.getElementById("progressbar").style.opacity = "0.0";
+				xhr = undefined;
 			} else {
 				document.getElementById("run").classList.remove('running');
 				document.getElementById("warning-tag").classList.remove('hidden');
