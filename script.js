@@ -10,35 +10,43 @@ var debugUrl = "http://localhost:3000";
 var languages = {
 	'C++11': {
 		mode: 'ace/mode/c_cpp',
-		identifier: "cpp11"
+		identifier: "cpp11",
+		code: "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n\t//cout << \"Hello,World\" << endl;\n\t\n\treturn 0;\n}",
 	},
 	'C++': {
 		mode: 'ace/mode/c_cpp',
-		identifier: "cpp"
+		identifier: "cpp",
+		code: "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n\t//cout << \"Hello,World\" << endl;\n\t\n\treturn 0;\n}",
 	},
 	'C': {
 		mode: 'ace/mode/c_cpp',
-		identifier: "c"
+		identifier: "c",
+		code: "#include <stdio.h>\n\nint main(){\n\tprintf(\"Hello,world\\n\");\n\t\n\treturn 0;\n}",
 	},
 	/*'Ruby': {
 		mode: 'ace/mode/ruby',
-		identifier: "ruby"
+		identifier: "ruby",
+		code:"",
 	},*/
 	'Python': {
 		mode: 'ace/mode/python',
-		identifier: "python"
+		identifier: "python",
+		code: "print(\"Hello,World\")",
 	},
 	'PHP': {
 		mode: 'ace/mode/php',
-		identifier: "php"
+		identifier: "php",
+		code: "<?php\nprint(\"Hello,World\");\n?>",
 	},
 	/*'JavaScript': {
 		mode: 'ace/mode/javascript',
-		identifier: "js"
+		identifier: "js",
+		code: "",
 	},*/
 	'Bash': {
 		mode: 'ace/mode/bash',
-		identifier: "bash"
+		identifier: "bash",
+		code: "echo Hello,World",
 	}
 };
 
@@ -251,6 +259,7 @@ window.onload = function(){
 		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
 		console.log(lang);
 		editor.getSession().setMode(languages[lang].mode);
+		editor.setValue(languages[lang].code);
 	};
 
 	/*document.getElementById("auto-test").onclick = function(event){
