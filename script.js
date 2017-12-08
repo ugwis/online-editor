@@ -181,7 +181,7 @@ function run(lang, code, callback){
 			}
 		}
 	};
-	xhr.send(JSON.stringify({language: lang, code: code, input: stdin.getValue()}));
+	xhr.send(JSON.stringify({language: lang, code: code, stdin: stdin.getValue()}));
 }
 
 
