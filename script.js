@@ -122,9 +122,9 @@ function build(lang, code, callback){
 	xhr.onreadystatechange = function(e) {
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
+			document.getElementById("run").classList.remove('running');
+			document.getElementById("modify-tag").classList.add('hidden');
 			if (xhr.status >= 200 && xhr.status < 300) {
-				document.getElementById("run").classList.remove('running');
-				document.getElementById("modify-tag").classList.add('hidden');
 				stdout.setValue(remove_control_character(xhr.responseText));
 				document.getElementById("build-tag").classList.remove('hidden');
 				document.getElementById("progressbar").style.width = "50%";
@@ -132,15 +132,11 @@ function build(lang, code, callback){
 				xhr = undefined;
 				callback(lang, code);
 			} else if(xhr.status == 0) {
-				document.getElementById("run").classList.remove('running');
-				document.getElementById("modify-tag").classList.add('hidden');
 				document.getElementById("warning-tag").classList.remove('hidden');
 				document.getElementById("warning-tag").innerText = "Server response not received.";
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 			} else {
-				document.getElementById("run").classList.remove('running');
-				document.getElementById("modify-tag").classList.add('hidden');
 				document.getElementById("warning-tag").classList.remove('hidden');
 				document.getElementById("warning-tag").innerText = xhr.responseText;
 				xhr = undefined;
@@ -166,22 +162,19 @@ function run(lang, code, callback){
 	xhr.onreadystatechange = function(e) {
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
+			document.getElementById("run").classList.remove('running');
 			if (xhr.status >= 200 && xhr.status < 300) {
-				document.getElementById("run").classList.remove('running');
 				stdout.setValue(remove_control_character(xhr.responseText));
 				document.getElementById("progressbar").style.width = "100%";
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 				callback(lang, code, callback);
 			} else if(xhr.status == 0) {
-				document.getElementById("run").classList.remove('running');
-				document.getElementById("modify-tag").classList.add('hidden');
 				document.getElementById("warning-tag").classList.remove('hidden');
 				document.getElementById("warning-tag").innerText = "Server response not received.";
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 			} else {
-				document.getElementById("run").classList.remove('running');
 				document.getElementById("warning-tag").classList.remove('hidden');
 				document.getElementById("warning-tag").innerText = xhr.responseText;
 				xhr = undefined;
