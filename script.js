@@ -21,7 +21,7 @@ var languages = {
 	'C': {
 		mode: 'ace/mode/c_cpp',
 		identifier: "c",
-		code: "#include <stdio.h>\n\nint main(){\n\tprintf(\"Hello,world\\n\");\n\t\n\treturn 0;\n}",
+		code: "#include <stdio.h>\n\nint main(){\n\t//printf(\"Hello,world\\n\");\n\t\n\treturn 0;\n}",
 	},
 	/*'Ruby': {
 		mode: 'ace/mode/ruby',
