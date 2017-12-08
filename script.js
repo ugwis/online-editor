@@ -120,6 +120,7 @@ function progress(){
 function build(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
+	document.getElementById("warning-tag").classList.add('hidden')
 	document.getElementById("run").classList.add('running');
 	document.getElementById("progressbar").style.width = "0%";
 	document.getElementById("progressbar").style.opacity = "1.0";
@@ -157,6 +158,7 @@ function build(lang, code, callback){
 function run(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
+	document.getElementById("warning-tag").classList.add('hidden');
 	document.getElementById("run").classList.add("running");
 	document.getElementById("progressbar").style.opacity = "1.0";
 	xhr = new XMLHttpRequest();
