@@ -131,8 +131,18 @@ function build(lang, code, callback){
 	xhr.onreadystatechange = function(e) {
 		console.log(xhr.readyState);
 		if (xhr.readyState === 4) {
+			console.log("response: ",xhr.responseText);
+			console.log("response: ",xhr.responseText.length);
 			document.getElementById("run").classList.remove('running');
 			document.getElementById("modify-tag").classList.add('hidden');
+			if (xhr.responseText.length > 2) {
+				//Build error occured (temporary condition, will be removed)
+				document.getElementById("warning-tag").classList.remove('hidden');
+				document.getElementById("warning-tag").innerText = "Build failed";
+				stdout.setValue(remove_control_character(xhr.responseText));
+				document.getElementById("progressbar").style.opacity = "0.0";
+				xhr = undefined;
+			}
 			if (xhr.status >= 200 && xhr.status < 300) {
 				stdout.setValue(remove_control_character(xhr.responseText));
 				document.getElementById("build-tag").classList.remove('hidden');
