@@ -142,6 +142,7 @@ function build(lang, code, callback){
 				stdout.setValue(remove_control_character(xhr.responseText));
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
+				return;
 			}
 			if (xhr.status >= 200 && xhr.status < 300) {
 				stdout.setValue(remove_control_character(xhr.responseText));
