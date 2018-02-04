@@ -112,7 +112,7 @@ function build(lang, code, callback){
 				callback(lang, code);
 			} else if(xhr.status == 0) {
 				document.getElementById("warning-tag").classList.remove('hidden');
-				document.getElementById("warning-tag").innerText = "Server response not received.";
+				document.getElementById("warning-tag").innerText = "No response from the server.";
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 			} else {
