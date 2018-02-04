@@ -8,7 +8,7 @@ script:
   - echo "Do nothing"
 deploy:
   provider: script
-  script: ~/.local/bin/aws s3 sync dist s3://editor-ugwis-net --region=ap-northeast-1 --delete
+  script: aws s3 sync dist s3://editor-ugwis-net --region=ap-northeast-1 --delete
   skip_cleanup: true
   on:
     branch: master
