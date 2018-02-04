@@ -221,7 +221,7 @@ window.onload = function(){
 	});
 
 	//Load languages map
-	xhr = new XMLHttpRequest();
+	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "languages.json", true);
 	xhr.send(null);
 	xhr.onreadystatechange = function(){
