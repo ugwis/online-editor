@@ -7,48 +7,7 @@ var prog;
 var url = "//compiler.ugwis.net";
 var debugUrl = "http://localhost:3000";
 
-var languages = {
-	'C++11': {
-		mode: 'ace/mode/c_cpp',
-		identifier: "cpp11",
-		code: "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n\t//cout << \"Hello,World\" << endl;\n\t\n\treturn 0;\n}",
-	},
-	'C++': {
-		mode: 'ace/mode/c_cpp',
-		identifier: "cpp",
-		code: "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n\t//cout << \"Hello,World\" << endl;\n\t\n\treturn 0;\n}",
-	},
-	'C': {
-		mode: 'ace/mode/c_cpp',
-		identifier: "c",
-		code: "#include <stdio.h>\n\nint main(){\n\t//printf(\"Hello,world\\n\");\n\t\n\treturn 0;\n}",
-	},
-	/*'Ruby': {
-		mode: 'ace/mode/ruby',
-		identifier: "ruby",
-		code:"",
-	},*/
-	'Python': {
-		mode: 'ace/mode/python',
-		identifier: "python",
-		code: "print(\"Hello,World\")",
-	},
-	'PHP': {
-		mode: 'ace/mode/php',
-		identifier: "php",
-		code: "<?php\nprint(\"Hello,World\");\n?>",
-	},
-	/*'JavaScript': {
-		mode: 'ace/mode/javascript',
-		identifier: "js",
-		code: "",
-	},*/
-	'Bash': {
-		mode: 'ace/mode/bash',
-		identifier: "bash",
-		code: "echo Hello,World",
-	}
-};
+var languages;
 
 function remove_control_character(str){
 	var ret = "";
@@ -261,12 +220,21 @@ window.onload = function(){
 		precompile_timer = setTimeout(pre_compile, 5000);
 	});
 
-	for(var i in languages){
-		var option = document.createElement("option");
-		option.text = i;
-		option.value = i;
-		document.getElementsByTagName("select")[0].appendChild(option);
-	}
+	//Load languages map
+	xhr = new XMLHttpRequest();
+	xhr.open("GET", "languages.json", true);
+	xhr.send(null);
+	xhr.onreadystatechange = function(){
+		if( xhr.readyState === 4 && xhr.status === 200 ){
+			languages = JSON.parse(xhr.responseText);
+			for(var i in languages){
+				var option = document.createElement("option");
+				option.text = i;
+				option.value = i;
+				document.getElementsByTagName("select")[0].appendChild(option);
+			}
+		}
+	};
 
 	document.getElementById("language-select").onchange = function(event){
 		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
