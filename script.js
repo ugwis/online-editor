@@ -265,3 +265,9 @@ window.onload = function(){
 	document.getElementById("build-tag").classList.add("hidden");
 	document.getElementById("warning-tag").classList.add("hidden");
 };
+
+
+
+window.addEventListener('beforeunload', function(e) {
+    e.returnValue = 'ソースコードは保存されません。このページを離れてもいいですか？';
+}, false);
