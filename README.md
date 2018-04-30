@@ -10,6 +10,7 @@ It provide Ace.js editor and compile your source code.
 $ git clone https://github.com/ugwis/online-editor.git
 $ cd online-editor
 $ docker-compose up #starting online-editor and online-compiler at standalone
+$ #wait for image pulling 
 $ open http://localhost:3001/
 ```
 
