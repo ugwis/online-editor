@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "3001:80"
+  docker:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - data:/tmp
+      - image:/var/lib/docker
+  api:
+    image: ugwis/online-compiler:master
+    ports:
+      - 3000:8080
+    links:
+      - docker
+    environment:
+      - DOCKER_HOST=tcp://docker:2375
+    volumes:
+      - data:/tmp
+
+volumes:
+  data:
+  image:
