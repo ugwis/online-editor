@@ -164,6 +164,22 @@ function run(lang, code, callback){
 	xhr.send(JSON.stringify({language: lang, code: code, stdin: stdin.getValue()}));
 }
 
+function waitforready(callback){
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", url + "/", true);
+	xhr.send(null);
+	xhr.onreadystatechange = function(){
+		if( xhr.readyState === 4 ){
+			if( xhr.status === 200 ){
+				callback();
+			} else {
+				setTimeout(function(){
+					waitforready(callback);
+				},1000);
+			}
+		}
+	};
+}
 
 window.onload = function(){
 	if(location.hostname !== "editor.ugwis.net"){
@@ -232,6 +248,12 @@ window.onload = function(){
 				option.text = i;
 				option.value = i;
 				document.getElementsByTagName("select")[0].appendChild(option);
+				waitforready(function(){
+					document.getElementById("loading").style.opacity = "0";
+					setTimeout(function(){
+						document.getElementById("loading").style.display = "none";
+					},4000);
+				});
 			}
 		}
 	};

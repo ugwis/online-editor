@@ -151,3 +151,144 @@ input:focus , input:hover {
 .hidden {
 	display: none;
 }
+
+#loading {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background: #515151;
+	z-index: 10;
+	transition: opacity 4s ease-in-out;
+}
+
+#logo {
+	background: #FFF;
+	width: 200px;
+	height: 200px;
+	margin: 0px auto;
+	display: block;
+	top: 50%;
+	position: absolute;
+	left: 50%;
+	margin: -100px 0 0 -100px;
+	border: 1px solid #6e6b6b;
+	border-radius: 30px;
+	overflow: hidden;
+	opacity: 0.9;
+	animation: show 2s ease-in-out 0s 1 none running;
+}
+
+#logo > div{
+	position: absolute;
+	opacity: 0.9;
+	animation: horizontal 2s ease-in-out 0s infinite alternate running;
+	display: block;
+	width: 200px;
+	height: 200px;
+}
+#logo > div:nth-child(1) {
+	animation-duration: 2.2s;
+}
+#logo > div:nth-child(2) {
+	animation-duration: 2.4s;
+}
+#logo > div:nth-child(3) {
+	animation-duration: 2.6s;
+}
+
+#logo > div > div {
+	position: absolute;
+	animation: vertical 3s ease-in-out 0s infinite alternate running;
+	display: block;
+	width: 200px;
+	height: 200px;
+}
+#logo > div:nth-child(1) > div{
+	animation-duration: 3.2s;
+}
+#logo > div:nth-child(2) > div{
+	animation-duration: 4.8s;
+}
+#logo > div:nth-child(3) > div{
+	animation-duration: 4.2s;
+}
+
+#logo > div > div > div {
+	position: absolute;
+	animation: rotation 6s ease-in-out 0s infinite none running;
+	display: block;
+	width: 200px;
+	height: 200px;
+}
+#logo > div:nth-child(1) > div > div{
+	animation-duration: 6.2s;
+}
+#logo > div:nth-child(2) > div > div{
+	animation-duration: 7.8s;
+}
+#logo > div:nth-child(3) > div > div{
+	animation-duration: 7.2s;
+}
+
+
+
+#logo1 > div > div > div {
+	width: 300px;
+    height: 100px;
+    background: #ff02ac80;
+    position: absolute;
+    top: -18px;
+    transform: rotate(30deg);
+	border: 1px solid #ff008780;
+}
+
+#logo2 > div > div > div{
+	width: 300px;
+	height: 100px;
+	background: #f0ff0280;
+	position: absolute;
+	bottom: -18px;
+	transform: rotate(-30deg);
+	border: 1px solid #c0cb1b;
+}
+#logo3 > div > div > div{
+	width: 350px;
+	height: 100px;
+	background: #02d2ff80;
+	position: absolute;
+	transform: rotate(90deg);
+	right: 18px;
+	border: 1px solid #01a9bd;
+}
+@keyframes rotation {
+	0% { transform:rotate(0deg); }
+	33% { transform:rotate(3deg); }
+	66% { transform:rotate(-3deg); }
+	100% { transform:rotate(0deg); }
+}
+@keyframes horizontal {
+    0% { transform:translateX( -3px); }
+  100% { transform:translateX(  0px); }
+}
+@keyframes vertical {
+    0% { transform:translateY(-10px); }
+  100% { transform:translateY(  0px); }
+}
+
+#loading > span {
+	position: absolute;
+	top: 50%;
+	text-align: center;
+	width: 100%;
+	margin-top: 140px;
+	font-size: x-large;
+	animation: show 2s ease-in-out 0s 1 none running;
+}
+@keyframes show {
+	0% { opacity: 0 };
+	100% { opacity: 0.9 };
+}
+
+
