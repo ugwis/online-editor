@@ -160,7 +160,7 @@ input:focus , input:hover {
 	left: 0px;
 	background: #515151;
 	z-index: 10;
-	transition: opacity 4s ease-in-out;
+	transition: opacity 2s ease-in-out;
 }
 
 #logo {
