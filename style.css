@@ -4,7 +4,7 @@
 	font-family:'Yu Gothic','Meiryo UI','Meiryo',sans-serif;
 }
 
-span {
+#toolbar span {
 	color:#FFF; 
 }
 
@@ -153,6 +153,7 @@ input:focus , input:hover {
 }
 
 #loading {
+	color:#FFF; 
 	width: 100%;
 	height: 100%;
 	position: fixed;
