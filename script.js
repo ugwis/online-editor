@@ -76,6 +76,25 @@ function progress(){
 	prog = setTimeout(progress, 1000);
 }
 
+function error_parser(s,lang){
+	if(lang[0] == "c"){
+		annotations = [];
+		for(var line of s.split("\n")) {
+			result = line.match(/main.[a-zA-Z]{1,3}:(\d*):(\d*):([a-zA-Z: '";]*)/);
+			console.log(result);
+			if(result !== undefined && result !== null && result.length >= 3){
+				annotations.push({
+					row: parseInt(result[1]-1),
+					column: parseInt(result[2]),
+					text: result[3],
+					type: "error"
+				});
+			}
+		}
+		editor.getSession().setAnnotations(annotations);
+	}
+}
+
 function build(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
@@ -99,6 +118,7 @@ function build(lang, code, callback){
 				document.getElementById("warning-tag").classList.remove('hidden');
 				document.getElementById("warning-tag").innerText = "Build failed";
 				stdout.setValue(remove_control_character(xhr.responseText));
+				error_parser(xhr.responseText, lang);
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
 				return;
