@@ -93,6 +93,23 @@ function error_parser(s,lang){
 		}
 		editor.getSession().setAnnotations(annotations);
 	}
+	if(lang == "golang"){
+		annotations = [];
+		for(var line of s.split("\n")) {
+			result = line.match(/.\/main.[a-zA-Z]{1,3}:(\d*):(\d*):(.*)/);
+			console.log(result);
+			if(result !== undefined && result !== null && result.length >= 3){
+				annotations.push({
+					row: parseInt(result[1]-1),
+					column: parseInt(result[2]),
+					text: result[3],
+					type: "error"
+				});
+			}
+		}
+		editor.getSession().setAnnotations(annotations);
+	}
+
 }
 
 function build(lang, code, callback){
