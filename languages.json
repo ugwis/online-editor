@@ -29,6 +29,11 @@
 		"identifier": "python",
 		"code": "print(\"Hello,World\")"
 	},
+	"Python2": {
+		"mode": "ace/mode/python",
+		"identifier": "python2",
+		"code": "print \"Hello,World\""
+	},
 	"PHP": {
 		"mode": "ace/mode/php",
 		"identifier": "php",
