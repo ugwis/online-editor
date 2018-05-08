@@ -218,7 +218,7 @@ window.onload = function(){
 	editor.setShowInvisibles(true);
 	editor.setShowPrintMargin(false);
 	editor.setOptions({
-		fontFamily:'Menlo,Monaco,Consolas',
+		fontFamily:'Monaco, Menlo, Ubuntu Mono, Consolas, source-code-pro, monospace',
 		fontSize: "20px",
 		enableBasicAutocompletion: false,
 		enableSnippets: true,
