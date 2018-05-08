@@ -48,5 +48,10 @@
 		"mode": "ace/mode/rust",
 		"identifier": "rust",
 		"code": "fn main() {\n\tprintln!(\"Hello World!\");\n}"
+	},
+	"Golang": {
+		"mode": "ace/mode/golang",
+		"identifier": "golang",
+		"code": "package main\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Printf(\"Hello World\\n\")\n}"
 	}
 }
