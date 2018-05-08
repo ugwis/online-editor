@@ -57,7 +57,7 @@ span {
 
 #language-select {
 	height: 40px;
-	background: transparent;
+	background: #333;
 	border: 0px;
 	color: #FFF;
 	-webkit-appearance: none;
