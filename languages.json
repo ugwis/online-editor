@@ -38,5 +38,10 @@
 		"mode": "ace/mode/bash",
 		"identifier": "bash",
 		"code": "echo Hello,World"
+	},
+	"Rust": {
+		"mode": "ace/mode/rust",
+		"identifier": "rust",
+		"code": "fn main() {\n\tprintln!(\"Hello World!\");\n}"
 	}
 }
