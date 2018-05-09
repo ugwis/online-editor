@@ -295,6 +295,20 @@ window.onload = function(){
 		}
 	};
 
+	var moving = false;
+	document.body.onmouseup = function(event){
+		moving = false;
+	};
+	document.getElementById("separator").onmousedown = function(event){
+		moving = true;
+	};
+	document.body.onmousemove = function(event){
+		if(moving){
+			document.getElementById("editor").style.width = "calc(" + event.clientX + "px - 1.5px)";
+			document.getElementById("stdio").style.width = "calc(100% - " + event.clientX + "px - 1.5px)";
+		}
+	};
+
 	document.getElementById("language-select").onchange = function(event){
 		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
 		console.log(lang);
