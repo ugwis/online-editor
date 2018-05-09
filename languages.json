@@ -53,5 +53,10 @@
 		"mode": "ace/mode/golang",
 		"identifier": "golang",
 		"code": "package main\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Printf(\"Hello World\\n\")\n}"
+	},
+	"JavaScript": {
+		"mode": "ace/mode/javascript",
+		"identifier": "node",
+		"code": "console.log(\"Hello World!\");"
 	}
 }
