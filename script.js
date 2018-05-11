@@ -145,12 +145,14 @@ function build(lang, code, callback){
 				document.getElementById("build-tag").classList.remove('hidden');
 				document.getElementById("progressbar").style.width = "50%";
 				document.getElementById("progressbar").style.opacity = "0.0";
+				error_parser(xhr.responseText, lang);
 				xhr = undefined;
 				callback(lang, code);
 			} else if(xhr.status == 0) {
 				document.getElementById("warning-tag").classList.remove('hidden');
 				document.getElementById("warning-tag").innerText = "No response from the server.";
 				document.getElementById("progressbar").style.opacity = "0.0";
+				error_parser(xhr.responseText, lang);
 				xhr = undefined;
 			} else {
 				document.getElementById("warning-tag").classList.remove('hidden');
