@@ -226,8 +226,10 @@ window.onload = function(){
 	}
 	stdin = ace.edit("stdin");
 	stdin.setTheme("ace/theme/monokai");
+	stdin.setShowPrintMargin(false);
 	stdout = ace.edit("stdout");
 	stdout.setTheme("ace/theme/monokai");
+	stdout.setShowPrintMargin(false);
 	editor = ace.edit("editor");
 	editor.setValue("#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n	\n	\n	return 0;\n}");
 	editor.setTheme("ace/theme/monokai");
