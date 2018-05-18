@@ -6,6 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<script src="ace-builds/src-min/ace.js"></script>
 		<script src="ace-builds/src-min/ext-language_tools.js"></script>
+		<script src="moment/min/moment.min.js"></script>
 		<script src="script.js"></script>
 		<script src="https://cdn.logrocket.com/LogRocket.min.js"></script>
 		<script>window.LogRocket && window.LogRocket.init('mmobh0/online-editor');</script>
@@ -27,6 +28,10 @@
 				<select id="language-select">
 				</select>
 			</div>
+			<span id="last-session-tag" class="tag2">
+				Last Session
+				<span class="text"></span>
+			</span>
 			<span id="modify-tag">Modified</span>
 			<span id="build-tag">Built</span>
 			<span id="warning-tag">Warning</span>
@@ -37,6 +42,22 @@
 		<div id="stdio">
 			<div id="stdin"></div>
 			<div id="stdout"></div>
+		</div>
+		<div id="modal-wrap" class="hidden" style="opacity: 0.0">
+			<div id="modal">
+				<div class="header">
+					<select style="padding:0px; background:transparent;border:0px; width: 0px; height:40px;"></select>
+					<span id="confirmer-language-tag" class="tag2">Language<span class="text"></span>
+					</span>
+					<span id="confirmer-date-tag" class="tag2">Last Modified<span class="text"></span>
+					</span>
+				</div>
+				<div id="confirmer"></div>
+				<div class="footer">
+					<button id="btn-cancel">Cancel</button>
+					<button id="btn-recover">Recover</button>
+				</div>
+			</div>
 		</div>
 		<div id="loading">
 			<div id="logo">

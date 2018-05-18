@@ -1,13 +1,26 @@
 ﻿var editor;
 var stdin;
 var stdout;
+var confirmer;
 var xhr;
 var prog;
+
+var codeHash;
 
 var url = "//compiler.ugwis.net";
 var debugUrl = "http://localhost:3000";
 
 var languages;
+
+function latest(obj){
+	var arr = Object.keys(obj);
+	if(arr.length === 0){
+		return undefined;
+	}
+	return obj[arr.sort(function(a,b){
+		return parseInt(a) > parseInt(b);
+	})[0]];
+}
 
 function remove_control_character(str){
 	var ret = "";
@@ -224,6 +237,7 @@ window.onload = function(){
 	if(location.hostname !== "editor.ugwis.net"){
 		url = debugUrl;
 	}
+	codeHash = moment().unix();
 	stdin = ace.edit("stdin");
 	stdin.setTheme("ace/theme/monokai");
 	stdin.setShowPrintMargin(false);
@@ -247,6 +261,19 @@ window.onload = function(){
 	});
 	editor.$blockScrolling = Infinity;
 	editor.navigateTo(5,1);
+	confirmer = ace.edit("confirmer");
+	confirmer.setTheme("ace/theme/monokai");
+	confirmer.getSession().setMode("ace/mode/c_cpp");
+	confirmer.getSession().setUseSoftTabs(false);
+	confirmer.setShowInvisibles(true);
+	confirmer.setShowPrintMargin(false);
+	confirmer.setReadOnly(true);
+	confirmer.setHighlightActiveLine(false);
+	confirmer.setOptions({
+		fontFamily:'Monaco, Menlo, Ubuntu Mono, Consolas, source-code-pro, monospace',
+		fontSize: "12px",
+	});
+
 	var func_run = function(callback){
 		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
 		build(
@@ -266,6 +293,21 @@ window.onload = function(){
 	editor.on('change', function(){
 		document.getElementById("build-tag").classList.add('hidden');
 		document.getElementById("modify-tag").classList.remove('hidden');
+		if(('localStorage' in window) && (window.localStorage !== null)){
+			var history = JSON.parse(localStorage.getItem("history"));
+			if(history === null || history === undefined){
+				history = {};
+			}
+			var lang_name = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
+			var cont = {
+				'date': moment(),
+				'code': editor.getValue(),
+				'stdin': stdin.getValue(),
+				'language': lang_name
+			};
+			history[codeHash] = cont;
+			localStorage.setItem('history', JSON.stringify(history));
+		}
 		function pre_compile (){
 			var code = editor.getValue();
 			console.log("Syntax check:", syntax_check(code));
@@ -275,6 +317,23 @@ window.onload = function(){
 		}
 		if(precompile_timer) clearTimeout(precompile_timer);
 		precompile_timer = setTimeout(pre_compile, 5000);
+	});
+	stdin.on('change', function(){
+		if(('localStorage' in window) && (window.localStorage !== null)){
+			var history = JSON.parse(localStorage.getItem("history"));
+			if(history === null || history === undefined){
+				history = {};
+			}
+			var lang_name = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
+			var cont = {
+				'date': moment(),
+				'code': editor.getValue(),
+				'stdin': stdin.getValue(),
+				'language': lang_name
+			};
+			history[codeHash] = cont;
+			localStorage.setItem('history', JSON.stringify(history));
+		}
 	});
 
 	//Load languages map
@@ -341,6 +400,39 @@ window.onload = function(){
 	document.getElementById("modify-tag").classList.add("hidden");
 	document.getElementById("build-tag").classList.add("hidden");
 	document.getElementById("warning-tag").classList.add("hidden");
+	if(('localStorage' in window) && (window.localStorage !== null) && localStorage.getItem('history') !== null){
+		var last_session = latest(JSON.parse(localStorage.getItem('history')));
+		if(last_session !== undefined){
+			var edit_date = moment(last_session.date);
+			document.querySelector("#last-session-tag > .text").innerText = edit_date.format('LLL');
+			document.getElementById("last-session-tag").onclick = function(){
+				document.getElementById("modal-wrap").style.opacity = "1.0";
+				document.getElementById("modal-wrap").classList.remove("hidden");
+				document.querySelector("#confirmer-language-tag > .text").innerText = this.language;
+				document.querySelector("#confirmer-date-tag > .text").innerText = moment(this.date).format('LLL');
+				confirmer.setValue(this.code);
+			}.bind(last_session);
+	
+			document.getElementById("btn-cancel").onclick = function(){
+				document.getElementById("modal-wrap").style.opacity = "0";
+				setTimeout(function(){
+					document.getElementById("modal-wrap").classList.add("hidden");
+				},1000);
+			};
+	
+			document.getElementById("btn-recover").onclick = function(){
+				codeHash = moment().unix();
+				document.getElementById("modal-wrap").style.opacity = "0";
+				setTimeout(function(){
+					document.getElementById("modal-wrap").classList.add("hidden");
+					editor.setValue(confirmer.getValue());
+					stdin.setValue(this.stdin);
+				}.bind(this),1000);
+			}.bind(last_session);
+		}
+	} else {
+		document.getElementById("last-session-tag").classList.add("hidden");
+	}
 };
 
 
