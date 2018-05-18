@@ -56,7 +56,7 @@
 
 #language-select {
 	height: 40px;
-	background: #333333c9;
+	background: rgba(51,51,51,0.7);
 	border: 0px;
 	color: #FFF;
 	-webkit-appearance: none;
@@ -323,7 +323,7 @@ input:focus , input:hover {
 }
 
 #modal-wrap {
-	background: #595959cc;
+	background: rgba(89,89,89,0.8);
 	display: block;
 	position: fixed;
 	z-index: 10;
