@@ -22,13 +22,16 @@ function latest(obj){
 	})[0]];
 }
 
-function remove_control_character(str){
-	var ret = "";
-	for (var i=0; i<str.length; i++) {
-		var chr = str.charCodeAt(i);
-		if (chr >= 0x20 || chr == 0x0d || chr == 0x0a) {
-			ret += String.fromCharCode(chr);
+function parse_response(str){
+	var ret = {};
+	for(var line of str.split("\n")){
+		var sp = line.split(":");
+		var opt = sp[0];
+		var s = sp.slice(1).join(":");
+		if(ret[opt] === undefined){
+			ret[opt] = "";
 		}
+		ret[opt] += s + "\n";
 	}
 	return ret;
 }
@@ -91,6 +94,7 @@ function progress(){
 
 function error_parser(s,lang){
 	if(lang[0] == "c"){
+		console.log(s);
 		annotations = [];
 		for(var line of s.split("\n")) {
 			result = line.match(/main.[a-zA-Z]{1,3}:(\d*):(\d*):([a-zA-Z: '";]*)/);
@@ -125,78 +129,37 @@ function error_parser(s,lang){
 
 }
 
-function build(lang, code, callback){
-	if(xhr) return;
-	if(callback === undefined) callback = function(){};
-	document.getElementById("warning-tag").classList.add('hidden');
-	document.getElementById("run").classList.add('running');
-	document.getElementById("progressbar").style.width = "0%";
-	document.getElementById("progressbar").style.opacity = "1.0";
-	xhr = new XMLHttpRequest();
-	if(prog === undefined) prog = setTimeout(progress(),0);
-	xhr.open("POST", url + "/build", true);
-	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-	xhr.onreadystatechange = function(e) {
-		console.log(xhr.readyState);
-		if (xhr.readyState === 4) {
-			console.log("response: ",xhr.responseText);
-			console.log("response: ",xhr.responseText.length);
-			document.getElementById("run").classList.remove('running');
-			document.getElementById("modify-tag").classList.add('hidden');
-			if (xhr.responseText.length > 2) {
-				//Build error occured (temporary condition, will be removed)
-				document.getElementById("warning-tag").classList.remove('hidden');
-				document.getElementById("warning-tag").innerText = "Build failed";
-				stdout.setValue(remove_control_character(xhr.responseText));
-				error_parser(xhr.responseText, lang);
-				document.getElementById("progressbar").style.opacity = "0.0";
-				xhr = undefined;
-				return;
-			}
-			if (xhr.status >= 200 && xhr.status < 300) {
-				stdout.setValue(remove_control_character(xhr.responseText));
-				document.getElementById("build-tag").classList.remove('hidden');
-				document.getElementById("progressbar").style.width = "50%";
-				document.getElementById("progressbar").style.opacity = "0.0";
-				error_parser(xhr.responseText, lang);
-				xhr = undefined;
-				callback(lang, code);
-			} else if(xhr.status == 0) {
-				document.getElementById("warning-tag").classList.remove('hidden');
-				document.getElementById("warning-tag").innerText = "No response from the server.";
-				document.getElementById("progressbar").style.opacity = "0.0";
-				error_parser(xhr.responseText, lang);
-				xhr = undefined;
-			} else {
-				document.getElementById("warning-tag").classList.remove('hidden');
-				document.getElementById("warning-tag").innerText = xhr.responseText;
-				xhr = undefined;
-			}
-		}
-	};
-	xhr.send(JSON.stringify({language: lang, code: code}));
-}
-
 function run(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
 	document.getElementById("warning-tag").classList.add('hidden');
 	document.getElementById("run").classList.add("running");
+	document.getElementById("progressbar").style.width = "0%";
 	document.getElementById("progressbar").style.opacity = "1.0";
 	xhr = new XMLHttpRequest();
 	if(prog === undefined) prog = setTimeout(progress(),0);
 	xhr.open("POST", url + "/run", true);
 	xhr.onprogress = function () {
 		console.log("PROGRESS:", xhr.responseText);
-		stdout.setValue(remove_control_character(xhr.responseText));
+		var resp = parse_response(xhr.responseText);
+		console.log(resp);
+		console.log(lang);
+		if(resp["g++"]){
+			stdout.setValue(resp["g++"]);
+			error_parser(resp["g++"],lang);
+		} else if(resp.gcc){
+			stdout.setValue(resp.gcc);
+			error_parser(resp.gcc,lang);
+		} else {
+			stdout.setValue(resp.stdout);
+		}
 	};
 	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
 	xhr.onreadystatechange = function(e) {
 		console.log(xhr.readyState);
-		if (xhr.readyState === 4) {
+			if (xhr.readyState === 4) {
 			document.getElementById("run").classList.remove('running');
 			if (xhr.status >= 200 && xhr.status < 300) {
-				stdout.setValue(remove_control_character(xhr.responseText));
 				document.getElementById("progressbar").style.width = "100%";
 				document.getElementById("progressbar").style.opacity = "0.0";
 				xhr = undefined;
@@ -276,7 +239,7 @@ window.onload = function(){
 
 	var func_run = function(callback){
 		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
-		build(
+		run(
 			languages[lang].identifier,	
 			editor.getValue(),
 			callback
@@ -286,7 +249,9 @@ window.onload = function(){
 		name: 'Run',
 		bindKey: {win: 'Ctrl-R', mac: 'Command-R'},
 		exec: function(edtior){
-			func_run(run);
+			func_run(function(){
+
+			});
 		}
 	});
 	var precompile_timer;
@@ -393,7 +358,9 @@ window.onload = function(){
 		if(document.getElementById("run").classList.contains("running")) {
 			document.getElementById("run").classList.remove("running");
 		} else {
-			func_run(run);
+			func_run(function(){
+
+			});
 		}
 	};
 
