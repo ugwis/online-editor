@@ -125,58 +125,6 @@ function error_parser(s,lang){
 
 }
 
-function build(lang, code, callback){
-	if(xhr) return;
-	if(callback === undefined) callback = function(){};
-	document.getElementById("warning-tag").classList.add('hidden');
-	document.getElementById("run").classList.add('running');
-	document.getElementById("progressbar").style.width = "0%";
-	document.getElementById("progressbar").style.opacity = "1.0";
-	xhr = new XMLHttpRequest();
-	if(prog === undefined) prog = setTimeout(progress(),0);
-	xhr.open("POST", url + "/build", true);
-	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-	xhr.onreadystatechange = function(e) {
-		console.log(xhr.readyState);
-		if (xhr.readyState === 4) {
-			console.log("response: ",xhr.responseText);
-			console.log("response: ",xhr.responseText.length);
-			document.getElementById("run").classList.remove('running');
-			document.getElementById("modify-tag").classList.add('hidden');
-			if (xhr.responseText.length > 2) {
-				//Build error occured (temporary condition, will be removed)
-				document.getElementById("warning-tag").classList.remove('hidden');
-				document.getElementById("warning-tag").innerText = "Build failed";
-				stdout.setValue(remove_control_character(xhr.responseText));
-				error_parser(xhr.responseText, lang);
-				document.getElementById("progressbar").style.opacity = "0.0";
-				xhr = undefined;
-				return;
-			}
-			if (xhr.status >= 200 && xhr.status < 300) {
-				stdout.setValue(remove_control_character(xhr.responseText));
-				document.getElementById("build-tag").classList.remove('hidden');
-				document.getElementById("progressbar").style.width = "50%";
-				document.getElementById("progressbar").style.opacity = "0.0";
-				error_parser(xhr.responseText, lang);
-				xhr = undefined;
-				callback(lang, code);
-			} else if(xhr.status == 0) {
-				document.getElementById("warning-tag").classList.remove('hidden');
-				document.getElementById("warning-tag").innerText = "No response from the server.";
-				document.getElementById("progressbar").style.opacity = "0.0";
-				error_parser(xhr.responseText, lang);
-				xhr = undefined;
-			} else {
-				document.getElementById("warning-tag").classList.remove('hidden');
-				document.getElementById("warning-tag").innerText = xhr.responseText;
-				xhr = undefined;
-			}
-		}
-	};
-	xhr.send(JSON.stringify({language: lang, code: code}));
-}
-
 function run(lang, code, callback){
 	if(xhr) return;
 	if(callback === undefined) callback = function(){};
@@ -276,7 +224,7 @@ window.onload = function(){
 
 	var func_run = function(callback){
 		var lang = document.getElementById("language-select").options[document.getElementById("language-select").selectedIndex].innerText;
-		build(
+		run(
 			languages[lang].identifier,	
 			editor.getValue(),
 			callback
@@ -286,7 +234,7 @@ window.onload = function(){
 		name: 'Run',
 		bindKey: {win: 'Ctrl-R', mac: 'Command-R'},
 		exec: function(edtior){
-			func_run(run);
+			func_run(function(){});
 		}
 	});
 	var precompile_timer;
